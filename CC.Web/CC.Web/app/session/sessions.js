@@ -1,25 +1,22 @@
 ﻿(function () {
     'use strict';
 
-    angular
-        .module('app')
-        .controller('sessions', sessions);
+    var controllerId = 'sessions';
 
-    sessions.$inject = ['common']; 
+    angular.module('app').controller(controllerId,
+        ['common', sessions]);
 
     function sessions(common) {
-        /* jshint validthis:true */
+
         var vm = this;
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
-
+        vm.activate = activate;
         vm.sessions = [];
-        vm.title = 'sessions';
+        vm.title = 'Sessions';
 
         activate();
 
-        function activate() { }
-        //TODO: get our seesions
         function activate() {
             common.activateController([getSessions()], controllerId)
                 .then(function () { log('Activated Session View'); });
