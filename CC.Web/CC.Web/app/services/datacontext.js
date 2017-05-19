@@ -8,7 +8,7 @@
     function datacontext(common, emFactory) {
         var EntityQuery = breeze.EntityQuery;
         var getLogFn = common.logger.getLogFn;
-        var log = getLogFn(servideId);
+        var log = getLogFn(serviceId);
         var logError = getLogFn(serviceId, 'error');
         var logSuccess = getLogFn(serviceId, 'success');
         var manager = emFactory.newManager();
@@ -37,7 +37,7 @@
             return $q.when(people);
         }
 
-        function getSessionsPartials() {
+        function getSessionPartials() {
             var orderBy = 'timeSlotId, level, speaker.firstName';
             var sessions;
 
@@ -46,9 +46,10 @@
                 .orderBy(orderBy)
                 .toType('Session')
                 .using(manager).execute()
-                .then(querySucceeded, _queryFailed);
+                .to$q(querySucceeded, _queryFailed);
+
             function querySucceeded(data) {
-                session = data.results;
+                sessions = data.results;
                 log('Retrieved [Session Partials] from remote data source', sessions.length, true);
                 return sessions;
             }

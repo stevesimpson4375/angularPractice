@@ -6,7 +6,7 @@
     angular.module('app').controller(controllerId,
         ['common', 'datacontext',sessions]);
 
-    function sessions(common) {
+    function sessions(common, datacontext) {
 
         var vm = this;
         var getLogFn = common.logger.getLogFn;
