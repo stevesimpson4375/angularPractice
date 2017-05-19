@@ -4,7 +4,7 @@
     var controllerId = 'sessions';
 
     angular.module('app').controller(controllerId,
-        ['common', sessions]);
+        ['common', 'datacontext',sessions]);
 
     function sessions(common) {
 
@@ -23,7 +23,9 @@
         }
 
         function getSessions() {
-
+            return datacontext.getSessionPartials().then(function (data) {
+                return vm.sessions = data;
+            });
         }
     }
 })();

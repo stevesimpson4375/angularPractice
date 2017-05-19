@@ -2,14 +2,22 @@
     'use strict';
 
     var serviceId = 'datacontext';
-    angular.module('app').factory(serviceId, ['common', datacontext]);
+    angular.module('app').factory(serviceId,
+        ['common', 'entityManagerFactory', datacontext]);
 
-    function datacontext(common) {
+    function datacontext(common, emFactory) {
+        var EntityQuery = breeze.EntityQuery;
+        var getLogFn = common.logger.getLogFn;
+        var log = getLogFn(servideId);
+        var logError = getLogFn(serviceId, 'error');
+        var logSuccess = getLogFn(serviceId, 'success');
+        var manager = emFactory.newManager();
         var $q = common.$q;
 
         var service = {
             getPeople: getPeople,
-            getMessageCount: getMessageCount
+            getMessageCount: getMessageCount,
+            getSessionPartials: getSessionPartials
         };
 
         return service;
@@ -27,6 +35,29 @@
                 { firstName: 'Haley', lastName: 'Guthrie', age: 35, location: 'Wyoming' }
             ];
             return $q.when(people);
+        }
+
+        function getSessionsPartials() {
+            var orderBy = 'timeSlotId, level, speaker.firstName';
+            var sessions;
+
+            return EntityQuery.from('Session')
+                .select('id, title, code, speakerId, trackId, timeSlotId, roomId, level, tags')
+                .orderBy(orderBy)
+                .toType('Session')
+                .using(manager).execute()
+                .then(querySucceeded, _queryFailed);
+            function querySucceeded(data) {
+                session = data.results;
+                log('Retrieved [Session Partials] from remote data source', sessions.length, true);
+                return sessions;
+            }
+        }
+
+        function _queryFailed(error) {
+            var msg = config.appErrorPrefix + 'Error retreiving data.' + error.message;
+            logError(msg, error);
+            throw error;
         }
     }
 })();

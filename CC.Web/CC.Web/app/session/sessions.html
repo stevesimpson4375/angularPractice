@@ -2,12 +2,12 @@
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div class="widget worange">
+                <div class="widget orange">
                     <div data-cc-widget-header title="{{vm.title}}" subtitle="{{ vm.sessions.length }}"></div>
                     <div class="widget-content user">
                         <div class="padd" data-ng-repeat="s in vm.sessions">
                             <div class="user">
-                                <img src="{{ s.speaker.imageSource }}" class="img-polaroid user-pic"/>
+                                <img data-ng-src="{{ s.speaker.imageSource }}" class="img-polaroid user-pic"/>
                                 <div class="user-detials">
                                     <small>{{ s.timeSlot.name }}</small> at <small>{{ s.room.name }}</small>
                                     <small>{{ s.level }}</small>
