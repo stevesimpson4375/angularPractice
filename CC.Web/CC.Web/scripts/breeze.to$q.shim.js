@@ -1,8 +1,8 @@
-﻿// Legacy. Support apps that followed old recommendation of adding to$q
+﻿// Legacy. Support apps that followed old recommendation of adding then
 // to the end of Breeze methods that returned Q.js promises.
 // Althought harmless, we don't need or want it with this module.
-// But it may take time to remove to$q from an existing app.
-// Remove this shim when you have replaced all references to "to$q" with "then" in your app.
+// But it may take time to remove then from an existing app.
+// Remove this shim when you have replaced all references to "then" with "then" in your app.
 
 (function (definition, window) {
     if (window.breeze) {
@@ -64,7 +64,7 @@
         };
 
     function extendWith_to$q(promise) {
-        promise.to$q = function (success, fail) {
+        promise.then = function (success, fail) {
             return (success || fail) ? promise.then(success, fail) : promise;
         };
         return promise;

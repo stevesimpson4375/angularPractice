@@ -4,7 +4,7 @@
     var controllerId = 'sessions';
 
     angular.module('app').controller(controllerId,
-        ['common', 'datacontext',sessions]);
+        ['common', 'datacontext', sessions]);
 
     function sessions(common, datacontext) {
 

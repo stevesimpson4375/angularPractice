@@ -45,7 +45,7 @@
                     title: 'sessions',
                     templateUrl: 'app/session/sessions.html',
                     settings: {
-                        nav: 2,
+                        nav: 3,
                         content: '<i class="fa fa-calendar"></i> Sessions'
                     }
                 }
