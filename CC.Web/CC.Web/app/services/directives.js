@@ -199,4 +199,23 @@
             attrs.$set('class', 'widget-head');
         }
     });
+
+    app.directive('ccImgPerson', ['config', function (config) {
+        //Usage:
+        //<div data-cc-img-person title="{{ s.speaker.imageSource }}"></div>
+        var basePath = config.imageSettings.imageBasePath;
+        var unknownImage = config.imageSettings.unknownPersonImageSource;
+        var directive = {
+            link: link,
+            restrict: 'A'
+        };
+        return directive;
+        
+        function link(scope, element, attrs) {
+            attrs.$observe('ccImgPerson', function (value) {
+                value = basePath + (value || unknownImage);
+                attrs.$set('src', value);
+            });
+        }
+    }]);
 })();
