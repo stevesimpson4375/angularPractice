@@ -1,4 +1,4 @@
-﻿<section id="session-view" class="mainbar" data-ng-controller="sessions as vm">
+﻿<section id="speaker-view" class="mainbar" data-ng-controller="speakers as vm">
     <section class="matter">
         <div class="container-fluid">
             <div class="row-fluid">
@@ -9,7 +9,7 @@
                         <div class="padd list-flow" data-ng-repeat="s in vm.speakers">
                             <div class="user">
                                 <img data-cc-img-person="{{ s.imageSource }}"
-                                     class="img-polaroid user-pic" />
+                                     class="img-polaroid stacked" />
                                 <div class="name-stack">
                                     <h5>{{ s.firstName }}</h5>
                                     <h5>{{ s.lastName }}</h5>
