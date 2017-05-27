@@ -67,6 +67,24 @@
             }
         }
 
+        function getAttendees() {
+            var orderBy = 'firstName, lastName';
+            var attendees = [];
+
+            return EntityQuery.from('Persons')
+                .select('id, firstName, lastName, imageSource')
+                .orderBy(orderBy)
+                .toType('Person')
+                .using(manager).execute()
+                .then(querySucceeded, _queryFailed);
+
+            function querySucceeded(data) {
+                attendees = data.results;
+                log('Retrieved [Attendees] from remote data source', attendees.length, true);
+                return attendees;
+            }
+        }
+
         function getSessionPartials() {
             var orderBy = 'timeSlotId, level, speaker.firstName';
             var sessions;
