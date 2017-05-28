@@ -49,6 +49,16 @@
                         content: '<i class="icon-user"></i> Speakers'
                     }
                 }
+            }, {
+                url: '/attendees',
+                config: {
+                    title: 'attendees',
+                    templateUrl: 'app/attendee/attendees.html',
+                    settings: {
+                        nav: 4,
+                        content: '<i class="icon-group"></i> Attendees'
+                    }
+                }
             }
         ];
     }

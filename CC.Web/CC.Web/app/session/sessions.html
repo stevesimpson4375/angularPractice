@@ -1,6 +1,16 @@
 ﻿<section id="session-view" class="mainbar" data-ng-controller="sessions as vm">
     <section class="matter">
         <div class="container-fluid">
+
+            <div class="row-fluid">
+                <div class="form-search">
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-info"
+                           data-ng-click="vm.refresh()"><i class="fa fa-refresh"></i><span>Refresh</span></a>
+                    </div>
+                </div>
+            </div>
+
             <div class="row-fluid">
                 <div class="widget worange">
                     <div data-cc-widget-header title="{{vm.title}}" 

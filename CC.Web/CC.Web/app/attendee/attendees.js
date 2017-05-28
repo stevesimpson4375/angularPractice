@@ -9,18 +9,17 @@
     function attendees(common, datacontext) {
 
         var vm = this;
-
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
 
         vm.title = 'Attendees';
-        va.attendees = [];
+        vm.attendees = [];
 
         activate();
 
         function activate() {
             common.activateController([getAttendees()], controllerId)
-                .then(function () { log('Activated Attendeea View'); });
+                .then(function () { log('Activated Attendees View'); });
         }
 
         function getAttendees() {
@@ -29,7 +28,7 @@
                     vm.attendees = data;
                     return data;
                 }
-            )
+            );
         }
     }
 })();

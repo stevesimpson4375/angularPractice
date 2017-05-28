@@ -15,16 +15,25 @@
         var primePromise;
         var $q = common.$q;
 
+        var storeMeta = {
+            isLoaded: {
+                seesions: false,
+                attendees: false
+            }
+        };
+
         var entityNames = {
             attendee: 'Person',
             person: 'Person',
-            speaker: 'Session',
+            session: 'Session',
+            speaker: 'Speaker',
             room: 'Room',
             track: 'Track',
             timeslot: 'TimeSlot'
         };
 
         var service = {
+            getAttendees: getAttendees,
             getPeople: getPeople,
             getMessageCount: getMessageCount,
             getSessionPartials: getSessionPartials,
@@ -85,9 +94,14 @@
             }
         }
 
-        function getSessionPartials() {
+        function getSessionPartials(forceRemote) {
             var orderBy = 'timeSlotId, level, speaker.firstName';
             var sessions;
+
+            if (_areSessionsLoaded() && !forceRemote) {
+                sessions = _getAllLocal(entityNames.session, orderBy);
+                return $q.when(sessions);
+            }
 
             return EntityQuery.from('Sessions')
                 .select('id, title, code, speakerId, trackId, timeSlotId, roomId, level, tags')
@@ -98,6 +112,7 @@
 
             function querySucceeded(data) {
                 sessions = data.results;
+                _areSessionsLoaded(true);
                 log('Retrieved [Session Partials] from remote data source', sessions.length, true);
                 return sessions;
             }
@@ -166,6 +181,21 @@
             var msg =  'Error retreiving data.' + error.message;
             logError(msg, error);
             throw error;
+        }
+
+        function _areSessionsLoaded(value) {
+            return _areItemsLoaded('sessions', value);
+        }
+
+        function _areAttendeesLoaded(value) {
+            return _areItemsLoaded('attendees', value);
+        }
+
+        function _areItemsLoaded(key, value) {
+            if (value === undefined) {
+                return storeMeta.isLoaded[key];
+            }
+            return storeMeta.isLoaded[key] = value;
         }
     }
 })();

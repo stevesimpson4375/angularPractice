@@ -1,4 +1,4 @@
-﻿<section id="speaker-view" class="mainbar" data-ng-controller="attendees as vm">
+﻿<section id="attendee-view" class="mainbar" data-ng-controller="attendees as vm">
     <section class="matter">
         <div class="container-fluid">
             <div class="row-fluid">
@@ -6,7 +6,7 @@
                     <div data-cc-widget-header title="{{vm.title}}"
                          subtitle="{{ vm.attendees.length }}"></div>
                     <div class="widget-content user">
-                        <div class="padd list-flow" data-ng-repeat="s in vm.attendees">
+                        <div class="padd list-flow" data-ng-repeat="a in vm.attendees">
                             <div class="user">
                                 <img data-cc-img-person="{{ a.imageSource }}"
                                      class="img-polaroid stacked" />

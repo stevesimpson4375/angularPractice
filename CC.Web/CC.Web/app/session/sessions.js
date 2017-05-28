@@ -11,7 +11,7 @@
         var vm = this;
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
-        vm.activate = activate;
+        vm.refresh = refresh;
         vm.sessions = [];
         vm.title = 'Sessions';
 
@@ -22,10 +22,15 @@
                 .then(function () { log('Activated Session View'); });
         }
 
-        function getSessions() {
-            return datacontext.getSessionPartials().then(function (data) {
-                return vm.sessions = data;
-            });
+        function getSessions(forceRefresh) {
+            return datacontext.getSessionPartials(forceRefresh)
+                .then(function (data) {
+                    return vm.sessions = data;
+                });
+        }
+
+        function refresh() {
+            getSessions(true);
         }
     }
 })();
