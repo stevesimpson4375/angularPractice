@@ -3,10 +3,11 @@
 
     var serviceId = 'datacontext';
     angular.module('app').factory(serviceId,
-        ['common', 'entityManagerFactory', datacontext]);
+        ['common', 'entityManagerFactory', 'model', datacontext]);
 
-    function datacontext(common, emFactory) {
+    function datacontext(common, emFactory, model) {
         var EntityQuery = breeze.EntityQuery;
+        var entityNames = model.entityNames;
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(serviceId);
         var logError = getLogFn(serviceId, 'error');
@@ -20,16 +21,6 @@
                 seesions: false,
                 attendees: false
             }
-        };
-
-        var entityNames = {
-            attendee: 'Person',
-            person: 'Person',
-            session: 'Session',
-            speaker: 'Speaker',
-            room: 'Room',
-            track: 'Track',
-            timeslot: 'TimeSlot'
         };
 
         var service = {
@@ -71,7 +62,7 @@
             return EntityQuery.from('Speakers')
                 .select('id, firstName, lastName, imageSource')
                 .orderBy(speakerOrderBy)
-                .toType('Person')
+                .toType(entityNames.speaker)
                 .using(manager).execute()
                 .then(querySucceeded, _queryFailed);
 
@@ -97,7 +88,7 @@
             return EntityQuery.from('Persons')
                 .select('id, firstName, lastName, imageSource')
                 .orderBy(orderBy)
-                .toType('Person')
+                .toType(entityNames.attendee)
                 .using(manager).execute()
                 .then(querySucceeded, _queryFailed);
 
@@ -121,7 +112,7 @@
             return EntityQuery.from('Sessions')
                 .select('id, title, code, speakerId, trackId, timeSlotId, roomId, level, tags')
                 .orderBy(orderBy)
-                .toType('Session')
+                .toType(entityNames.session)
                 .using(manager).execute()
                 .then(querySucceeded, _queryFailed);
 

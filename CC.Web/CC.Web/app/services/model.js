@@ -6,8 +6,20 @@
     angular.module('app').factory(serviceId, model);
 
     function model() {
+
+        var entityNames = {
+            attendee: 'Person',
+            person: 'Person',
+            session: 'Session',
+            speaker: 'Person',
+            room: 'Room',
+            track: 'Track',
+            timeslot: 'TimeSlot'
+        };
+
         var service = {
-            configureMetadataStore: configureMetadataStore
+            configureMetadataStore: configureMetadataStore,
+            entityNames: entityNames
         };
 
         return service;
