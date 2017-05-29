@@ -21,7 +21,9 @@
         function registerPerson(metadataStore) {
             metadataStore.registerEntityTypeCtor('Person', Person);
 
-            function Person() { }
+            function Person() {
+                this.isSpeaker = false;
+            }
 
             Object.defineProperty(Person.prototype, 'fullName', {
                 get: function () {

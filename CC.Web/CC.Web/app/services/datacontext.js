@@ -58,9 +58,15 @@
             return $q.when(people);
         }
 
-        function getSpeakerPartials() {
+        function getSpeakerPartials(forceRemote) {
+            var predicate = breeze.Predicate.create('isSpeaker', '==', true)
             var speakerOrderBy = 'firstName, lastName';
             var speakers = [];
+
+            if (!forceRemote) {
+                speakers = _getAllLocal(entityNames.speaker, speakerOrderBy, predicate);
+                return $q.when(speakers);
+            }
 
             return EntityQuery.from('Speakers')
                 .select('id, firstName, lastName, imageSource')
@@ -71,14 +77,22 @@
 
             function querySucceeded(data) {
                 speakers = data.results;
+                for (var i = speakers.length; i--;) {
+                    speakers[i].isSpeaker = true;
+                }
                 log('Retrieved [Speaker Partials] from remote data source', speakers.length, true);
                 return speakers;
             }
         }
 
-        function getAttendees() {
+        function getAttendees(forceRemote) {
             var orderBy = 'firstName, lastName';
             var attendees = [];
+
+            if (_areAttendeesLoaded() && !forceRemote) {
+                attendees = _getAllLocal(entityNames.attendee, orderBy);
+                return $q.when(attendees);
+            }
 
             return EntityQuery.from('Persons')
                 .select('id, firstName, lastName, imageSource')
@@ -89,6 +103,7 @@
 
             function querySucceeded(data) {
                 attendees = data.results;
+                _areAttendeesLoaded(true);
                 log('Retrieved [Attendees] from remote data source', attendees.length, true);
                 return attendees;
             }
@@ -121,7 +136,7 @@
         function prime() {
             if (primePromise) return primePromise;
 
-            primePromise = $q.all([getLookups(), getSpeakerPartials()])
+            primePromise = $q.all([getLookups(), getSpeakerPartials(true)])
                 .then(extendMetadata)
                 .then(success);
             return primePromise;
@@ -159,9 +174,10 @@
             };
         }
 
-        function _getAllLocal(resource, ordering) {
+        function _getAllLocal(resource, ordering, predicate) {
             return EntityQuery.from(resource)
                 .orderBy(ordering)
+                .where(predicate)
                 .using(manager)
                 .executeLocally();
         }

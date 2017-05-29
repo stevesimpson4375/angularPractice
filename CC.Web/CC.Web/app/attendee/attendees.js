@@ -12,6 +12,7 @@
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
 
+        vm.refresh = refresh;
         vm.title = 'Attendees';
         vm.attendees = [];
 
@@ -22,13 +23,15 @@
                 .then(function () { log('Activated Attendees View'); });
         }
 
-        function getAttendees() {
-            return datacontext.getAttendees().then(
+        function getAttendees(forceRefresh) {
+            return datacontext.getAttendees(forceRefresh).then(
                 function (data) {
                     vm.attendees = data;
                     return data;
                 }
             );
         }
+
+        function refresh() { getAttendees(true); }
     }
 })();
