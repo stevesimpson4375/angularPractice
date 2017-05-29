@@ -24,6 +24,15 @@
 
         activate();
 
+        //$rootScope.$on('$locationChangeStart',
+        //    function(event, current, previous) {
+        //        var answer = $window.confirm('Leave?');
+        //        if (!answer) {
+        //            event.preventDefault();
+        //            return;
+        //        }
+        //    });
+
         function activate() {
             logSuccess('Code Camper Angular loaded!', null, true);
             common.activateController([], controllerId);
