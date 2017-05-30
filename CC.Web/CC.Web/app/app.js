@@ -23,6 +23,6 @@
     app.run(['$route', 'datacontext', 'routemediator',
         function ($route, datacontext, routemediator) {
             datacontext.prime();
-            routemediator.updateDocTitle();
+            routemediator.setRoutingHandlers();
         }]);        
 })();

@@ -10,6 +10,10 @@
     app.config(['$routeProvider', 'routes', routeConfigurator]);
     function routeConfigurator($routeProvider, routes) {
 
+        $routeProvider.when('/invalid', {
+                templateUrl: 'app/invladi.html'
+        });
+
         routes.forEach(function (r) {
             $routeProvider.when(r.url, r.config);
         });

@@ -5,19 +5,37 @@
 
     angular.module('app')
         .factory(serviceId,
-            ['$rootScope', 'config', routemediator]);
+            ['$location', '$rootScope', 'config', 'logger', routemediator]);
 
-    function routemediator($rootScope, config) {
+    function routemediator($location, $rootScope, config, logger) {
+        var handleRouteChangeError = false;
         var service = {
-            updateDocTitle: updateDocTitle
+            setRoutingHandlers: setRoutingHandlers
         };
 
         return service;
+
+        function setRoutingHandlers() {
+            updateDocTitle();
+            handleRoutingErrors();
+        }
+
+        function handleRoutingErrors() {
+            $rootScope.$on('$routeChangeError',
+                function (event, current, previous, rejection) {
+                    if (handleRouteChangeError) { return;}
+                    handleRouteChangeError = true;
+                    var msg = 'Error routing: ' + (current && current.name);
+                    logger.logWarning(msg, current, serviceId, true);
+                    $location.path('/');
+                });
+        }
 
         function updateDocTitle() {
 
             $rootScope.$on('$routeChangeSuccess',
                 function (event, current, previous) {
+                    handleRouteChangeError = false;
                     var title = config.docTitle + ' ' + (current.title || '');
                     $rootScope.title = title;
                 });
