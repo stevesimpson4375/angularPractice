@@ -20,8 +20,9 @@
     //    function ($route, $rootScope, $q) {
             // Include $route to kick start the router.
        //breeze.core.extendQ($rootScope, $q);
-    app.run(['$route', 'datacontext',
-        function ($route, datacontext) {
+    app.run(['$route', 'datacontext', 'routemediator',
+        function ($route, datacontext, routemediator) {
             datacontext.prime();
+            routemediator.updateDocTitle();
         }]);        
 })();
