@@ -22,7 +22,6 @@
        //breeze.core.extendQ($rootScope, $q);
     app.run(['$route', 'datacontext', 'routemediator',
         function ($route, datacontext, routemediator) {
-            datacontext.prime();
             routemediator.setRoutingHandlers();
         }]);        
 })();
