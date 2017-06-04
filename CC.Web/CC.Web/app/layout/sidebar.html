@@ -3,6 +3,24 @@
     <div class="sidebar-dropdown"><a href="#">Menu</a></div>
     <div class="sidebar-inner">
         <div class="sidebar-widget">
+            <!--<form class="form-inline">
+                <div class="input-append row-fluid">
+                    <input type="text" class="span8"
+                           placeholder="Find sessions"
+                           data-ng-model="vm.searchText"
+                           data-ng-keyup="vm.search($event)" />
+                    <a class="btn btn-info btn-notext input-group-addon" data-ng-click="vm.search($event)"></a>
+                </div>
+            </form>-->
+            <form class="row ng-pristine ng-valid">
+                <div class="input-group col-sm-12">
+                    <input type="text" class="form-control ng-pristine ng-valid" 
+                           placeholder="Find sessions" 
+                           data-ng-model="vm.searchText" 
+                           data-ng-keyup="vm.search($event)">
+                    <a class="btn btn-info btn-notext input-group-addon" data-ng-click="vm.search($event)"><i class="fa fa-search"></i></a>
+                </div>
+            </form>
         </div>
         <ul class="navi">
             <li class="nlightblue fade-selection-animation" data-ng-class="vm.isCurrent(r)"
