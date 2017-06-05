@@ -25,6 +25,8 @@
 
         var service = {
             getAttendees: getAttendees,
+            getAttendeeCount: getAttendeeCount,
+            getFilteredCount: getFilteredCount,
             getPeople: getPeople,
             getMessageCount: getMessageCount,
             getSessionPartials: getSessionPartials,
@@ -76,13 +78,37 @@
             }
         }
 
-        function getAttendees(forceRemote) {
+        function getAttendeeCount() {
+            if (_areAttendeesLoaded()) {
+                return $q.when(_getLocalEntityCount('Persons'));
+            }
+
+            return EntityQuery.from('Persons')
+                .using(manager).execute()
+                .then(_getInlineCount);
+        }
+
+        function _getInlineCount(data) { return data.inlineCount; }
+
+        function _getLocalEntityCount(resource) {
+            var entities = EntityQuery.from(resource)
+                .using(manager)
+                .executeLocally();
+            return entities.length;
+        }
+
+        function getAttendeeFilteredCount() {
+            vm.getAttendeeFilteredCount = datacontext.getAttendeeFilteredCount(vm.attendeeSearch)
+        }
+
+        function getAttendees(forceRemote, page, size, nameFilter) {
             var orderBy = 'firstName, lastName';
-            var attendees = [];
+
+            var take = size || 20;
+            var skip = page ? (page - 1) * size : 0;
 
             if (_areAttendeesLoaded() && !forceRemote) {
-                attendees = _getAllLocal(entityNames.attendee, orderBy);
-                return $q.when(attendees);
+                return $q.when(getByPage());
             }
 
             return EntityQuery.from('Persons')
@@ -92,12 +118,43 @@
                 .using(manager).execute()
                 .then(querySucceeded, _queryFailed);
 
-            function querySucceeded(data) {
-                attendees = data.results;
-                _areAttendeesLoaded(true);
-                log('Retrieved [Attendees] from remote data source', attendees.length, true);
+            function getByPage() {
+                var predicate = null;
+                if (nameFilter) {
+                    predicate = _fullNamePredicate(nameFilter);
+                }
+                var attendees = EntityQuery.from('Persons')
+                    .where(predicate)
+                    .take(take)
+                    .skip(skip)
+                    .orderBy(orderBy)
+                    .using(manager)
+                    .executeLocally();
+
                 return attendees;
             }
+
+            function querySucceeded(data) {
+                _areAttendeesLoaded(true);
+                log('Retrieved [Attendees] from remote data source', data.results.length, true);
+                return getByPage();
+            }
+        }
+
+        function getFilteredCount(nameFilter) {
+            var predicate = _fullNamePredicate(nameFilter);
+
+            var attendees = EntityQuery.from('Persons')
+                .where(predicate)
+                .using(manager)
+                .executeLocally();
+
+            return attendees.length;
+        }
+
+        function _fullNamePredicate(filterValue) {
+            return breeze.Predicate.create('firstName', 'contains', filterValue)
+                .or('lastName', 'contains', filterValue);
         }
 
         function getSessionPartials(forceRemote) {
