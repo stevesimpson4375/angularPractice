@@ -8,26 +8,40 @@
         var log = getLogFn(controllerId);
 
         var vm = this;
+        vm.attendeeCount = 0;
+        vm.speakerCount = 0;
+        vm.sessionCount = 0;
+
         vm.news = {
             title: 'Code Camper Angular',
             description: 'Code Camper Angular is a SPA template for Angular developers.'
         };
-        vm.messageCount = 0;
         vm.people = [];
         vm.title = 'Dashboard';
 
         activate();
 
         function activate() {
-            var promises = [getMessageCount(), getPeople()];
+            var promises = [getAttendeeCount(), getSessionCount(), getSpeakerCount(), getPeople()];
             common.activateController(promises, controllerId)
                 .then(function () { log('Activated Dashboard View'); });
         }
 
-        function getMessageCount() {
-            return datacontext.getMessageCount().then(function (data) {
-                return vm.messageCount = data;
+        function getAttendeeCount() {
+            return datacontext.getAttendeeCount().then(function (data) {
+                return vm.attendeeCount = data;
             });
+        }
+
+        function getSessionCount() {
+            return datacontext.getSessionCount().then(function (data) {
+                return vm.sessionCount = data;
+            });
+        }
+
+        function getSpeakerCount() {
+            var speakers = datacontext.getSpeakersLocal();
+            vm.speakerCount = speakers.length;
         }
 
         function getPeople() {

@@ -6,6 +6,7 @@
         ['common', 'entityManagerFactory', 'model', datacontext]);
 
     function datacontext(common, emFactory, model) {
+        var Predicate = breeze.Predicate;
         var EntityQuery = breeze.EntityQuery;
         var entityNames = model.entityNames;
         var getLogFn = common.logger.getLogFn;
@@ -28,15 +29,14 @@
             getAttendeeCount: getAttendeeCount,
             getFilteredCount: getFilteredCount,
             getPeople: getPeople,
-            getMessageCount: getMessageCount,
+            getSessionCount: getSessionCount,
             getSessionPartials: getSessionPartials,
+            getSpeakersLocal: getSpeakersLocal,
             getSpeakerPartials: getSpeakerPartials,
             prime: prime
         };
 
         return service;
-
-        function getMessageCount() { return $q.when(72); }
 
         function getPeople() {
             var people = [
@@ -52,7 +52,7 @@
         }
 
         function getSpeakerPartials(forceRemote) {
-            var predicate = breeze.Predicate.create('isSpeaker', '==', true)
+            var predicate = Predicate.create('isSpeaker', '==', true)
             var speakerOrderBy = 'firstName, lastName';
             var speakers = [];
 
@@ -80,12 +80,29 @@
 
         function getAttendeeCount() {
             if (_areAttendeesLoaded()) {
-                return $q.when(_getLocalEntityCount('Persons'));
+                return $q.when(_getLocalEntityCount(entityNames.attendee));
             }
 
-            return EntityQuery.from('Persons')
+            return EntityQuery.from('Persons').take(0).inlineCount()
                 .using(manager).execute()
                 .then(_getInlineCount);
+        }
+
+        function getSessionCount() {
+            if (_areSessionsLoaded()) {
+                return $q.when(_getLocalEntityCount(entityNames.session));
+            }
+
+            return EntityQuery.from('Sessions')
+                .take(0).inlineCount()
+                .using(manager).execute()
+                .then(_getInlineCount);
+        }
+
+        function getSpeakersLocal() {
+            var orderBy = 'firstName, lastName';
+            var predicate = Predicate.create('isSpeaker', '==', true);
+            return _getAllLocal(entityNames.speaker, orderBy, predicate);
         }
 
         function _getInlineCount(data) { return data.inlineCount; }
@@ -153,7 +170,7 @@
         }
 
         function _fullNamePredicate(filterValue) {
-            return breeze.Predicate.create('firstName', 'contains', filterValue)
+            return Predicate.create('firstName', 'contains', filterValue)
                 .or('lastName', 'contains', filterValue);
         }
 

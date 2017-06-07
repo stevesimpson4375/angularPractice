@@ -71,7 +71,7 @@
                     templateUrl: 'app/speaker/speakers.html',
                     settings: {
                         nav: 3,
-                        content: '<i class="icon-user"></i> Speakers'
+                        content: '<i class="fa fa-user"></i> Speakers'
                     }
                 }
             }, {
@@ -81,7 +81,7 @@
                     templateUrl: 'app/attendee/attendees.html',
                     settings: {
                         nav: 4,
-                        content: '<i class="icon-group"></i> Attendees'
+                        content: '<i class="fa fa-users"></i> Attendees'
                     }
                 }
             }
