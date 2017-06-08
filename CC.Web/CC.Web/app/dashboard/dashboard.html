@@ -46,6 +46,41 @@
                     </ul>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="widget wgreen">
+                        <div data-cc-widget-header title="{{ vm.map.title }}"
+                             allow-collapse="true"></div>
+                        <div class="widget-content">
+                            <div class="map">
+                                <iframe width="400" height="230" frameborder="0", scrolling="no" marginheight="0"
+                                        marginwidth="0"
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2986.666503270153!2d-82.82984708510995!3d41.53316407925106!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x883a4dfc109e9ed5%3A0xc56be4def85be95d!2sFort+Firelands+RV+Resort!5e0!3m2!1sen!2sus!4v1496889616406" />
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="widget wlightblue">
+                            <div data-cc-widget-header title="{{ vm.speakers.title }}"
+                                 allow-collapse="true"></div>
+                            <div class="widget-content text-center text-info">
+                               <carousel class="carousel-inner" interval="vm.speakers.interval">
+                                   <slide data-ng-repeat="s in vm.speakers.list" active="s.active">
+                                       <img data-cc-img-person="{{ s.imageSource }}" class="img-polaroid"/>
+                                       <div class="carousel-caption">
+                                           <h4>{{ s.fullName }}</h4>
+                                       </div>
+                                   </slide>
+                               </carousel>
+                            </div>
+                        </div>
+                        <div class="widget-foot"></div>
+                    </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="widget wviolet">

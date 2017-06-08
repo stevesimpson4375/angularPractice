@@ -33,6 +33,7 @@
             getSessionPartials: getSessionPartials,
             getSpeakersLocal: getSpeakersLocal,
             getSpeakerPartials: getSpeakerPartials,
+            getSpeakersTopLocal: getSpeakersTopLocal,
             prime: prime
         };
 
@@ -102,6 +103,17 @@
         function getSpeakersLocal() {
             var orderBy = 'firstName, lastName';
             var predicate = Predicate.create('isSpeaker', '==', true);
+            return _getAllLocal(entityNames.speaker, orderBy, predicate);
+        }
+
+        function getSpeakersTopLocal() {
+            var orderBy = 'firstName, lastName';
+            var predicate = Predicate.create('lastName', '==', 'Papa')
+                .or('lastName', '==', 'Guthrie')
+                .or('lastName', '==', 'Bell')
+                .or('lastName', '==', 'Hanselman')
+                .or('lastName', '==', 'Lerman')
+                .and('isSpeaker', '==', true);
             return _getAllLocal(entityNames.speaker, orderBy, predicate);
         }
 
@@ -221,7 +233,7 @@
                 });
 
                 var personEntityName = entityNames.person;
-                ['Speakers', 'Speaker', 'Attendees', 'Attendee'].forEach(function(r) {
+                ['Speakers', 'Speaker', 'Attendees', 'Attendee'].forEach(function (r) {
                     set(r, personEntityName);
                 });
 
@@ -259,7 +271,7 @@
         }
 
         function _queryFailed(error) {
-            var msg =  'Error retreiving data.' + error.message;
+            var msg = 'Error retreiving data.' + error.message;
             logError(msg, error);
             throw error;
         }

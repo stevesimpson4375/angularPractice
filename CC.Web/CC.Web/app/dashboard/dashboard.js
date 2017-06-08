@@ -11,7 +11,14 @@
         vm.attendeeCount = 0;
         vm.speakerCount = 0;
         vm.sessionCount = 0;
-
+        vm.map = {
+            title: 'Location'
+        };
+        vm.speakers = {
+            interval: 500,
+            list: [],
+            title: 'Top Speakers'
+        };
         vm.news = {
             title: 'Code Camper Angular',
             description: 'Code Camper Angular is a SPA template for Angular developers.'
@@ -22,6 +29,7 @@
         activate();
 
         function activate() {
+            getTopSpeakers();
             var promises = [getAttendeeCount(), getSessionCount(), getSpeakerCount(), getPeople()];
             common.activateController(promises, controllerId)
                 .then(function () { log('Activated Dashboard View'); });
@@ -37,6 +45,10 @@
             return datacontext.getSessionCount().then(function (data) {
                 return vm.sessionCount = data;
             });
+        }
+
+        function getTopSpeakers() {
+            vm.speakers.list = datacontext.getSpeakersTopLocal();
         }
 
         function getSpeakerCount() {
