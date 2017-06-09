@@ -11,6 +11,13 @@
         vm.attendeeCount = 0;
         vm.speakerCount = 0;
         vm.sessionCount = 0;
+        vm.content = {
+            predicate: '',
+            reverse: false,
+            setSort: setContentSort,
+            title: 'Content',
+            tracks: []
+        };
         vm.map = {
             title: 'Location'
         };
@@ -20,17 +27,16 @@
             title: 'Top Speakers'
         };
         vm.news = {
-            title: 'Code Camper Angular',
-            description: 'Code Camper Angular is a SPA template for Angular developers.'
+            title: 'Code Camp',
+            description: 'Code Camp is a SPA template for Angular developers.'
         };
-        vm.people = [];
         vm.title = 'Dashboard';
 
         activate();
 
         function activate() {
             getTopSpeakers();
-            var promises = [getAttendeeCount(), getSessionCount(), getSpeakerCount(), getPeople()];
+            var promises = [getAttendeeCount(), getSessionCount(), getSpeakerCount(), getTrackCounts()];
             common.activateController(promises, controllerId)
                 .then(function () { log('Activated Dashboard View'); });
         }
@@ -47,6 +53,12 @@
             });
         }
 
+        function getTrackCounts() {
+            return datacontext.getTrackCounts().then(function (data) {
+                return vm.content.tracks = data;
+            });
+        }
+
         function getTopSpeakers() {
             vm.speakers.list = datacontext.getSpeakersTopLocal();
         }
@@ -56,10 +68,10 @@
             vm.speakerCount = speakers.length;
         }
 
-        function getPeople() {
-            return datacontext.getPeople().then(function (data) {
-                return vm.people = data;
-            });
+        function setContentSort(prop) {
+            vm.content.predicate = prop;
+            vm.content.reverse = !vm.content.reverse;
         }
+
     }
 })();

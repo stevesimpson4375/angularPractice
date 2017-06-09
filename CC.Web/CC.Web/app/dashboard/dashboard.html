@@ -2,7 +2,7 @@
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="span6">
                     <ul class="today-datas">
                         <li class="blightblue">
                             <div class="pull-left"><i class="fa fa-plane"></i></div>
@@ -48,13 +48,14 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="span6">
                     <div class="widget wgreen">
                         <div data-cc-widget-header title="{{ vm.map.title }}"
-                             allow-collapse="true"></div>
+                             allow-collapse="true">
+                        </div>
                         <div class="widget-content">
                             <div class="map">
-                                <iframe width="400" height="230" frameborder="0", scrolling="no" marginheight="0"
+                                <iframe width="400" height="230" frameborder="0" , scrolling="no" marginheight="0"
                                         marginwidth="0"
                                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2986.666503270153!2d-82.82984708510995!3d41.53316407925106!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x883a4dfc109e9ed5%3A0xc56be4def85be95d!2sFort+Firelands+RV+Resort!5e0!3m2!1sen!2sus!4v1496889616406" />
 
@@ -62,46 +63,44 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="span6">
                         <div class="widget wlightblue">
                             <div data-cc-widget-header title="{{ vm.speakers.title }}"
                                  allow-collapse="true"></div>
                             <div class="widget-content text-center text-info">
-                               <carousel class="carousel-inner" interval="vm.speakers.interval">
-                                   <slide data-ng-repeat="s in vm.speakers.list" active="s.active">
-                                       <img data-cc-img-person="{{ s.imageSource }}" class="img-polaroid"/>
-                                       <div class="carousel-caption">
-                                           <h4>{{ s.fullName }}</h4>
-                                       </div>
-                                   </slide>
-                               </carousel>
+                                <carousel class="carousel-inner" interval="vm.speakers.interval">
+                                    <slide data-ng-repeat="s in vm.speakers.list" active="s.active">
+                                        <img data-cc-img-person="{{ s.imageSource }}" class="img-polaroid" />
+                                        <div class="carousel-caption">
+                                            <h4>{{ s.fullName }}</h4>
+                                        </div>
+                                    </slide>
+                                </carousel>
                             </div>
                         </div>
                         <div class="widget-foot"></div>
                     </div>
+                </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="widget wviolet">
-                        <div data-cc-widget-header title="People"
+                        <div data-cc-widget-header title="{{ vm.content.title }}"
                              allow-collapse="true"></div>
-                        <div class="widget-content text-center text-info">
-                            <table class="table table-condensed table-striped">
+                        <div class="widget-content">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Age</th>
-                                        <th>Location</th>
+                                        <th><a data-ng-click="vm.content.setSort('track')" href="">Track</a></th>
+                                        <th><a data-ng-click="vm.content.setSort('count')" href="">Sessions</a></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-ng-repeat="p in vm.people">
-                                        <td>{{p.firstName}}</td>
-                                        <td>{{p.lastName}}</td>
-                                        <td>{{p.age}}</td>
-                                        <td>{{p.location}}</td>
+                                    <tr data-ng-repeat="t in vm.content.tracks
+                                        | orderBy:vm.content.predicate:vm.content.reverse">
+                                        <td>{{ t.track }}</td>
+                                        <td>{{ t.count }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -111,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="widget wgreen">
                         <div data-cc-widget-header title="{{vm.news.title}}"
                              allow-collapse="true"></div>

@@ -34,6 +34,7 @@
             getSpeakersLocal: getSpeakersLocal,
             getSpeakerPartials: getSpeakerPartials,
             getSpeakersTopLocal: getSpeakersTopLocal,
+            getTrackCounts: getTrackCounts,
             prime: prime
         };
 
@@ -98,6 +99,25 @@
                 .take(0).inlineCount()
                 .using(manager).execute()
                 .then(_getInlineCount);
+        }
+        function getTrackCounts() {
+            return getSessionPartials().then(function (data) {
+                var sessions = data;
+                var trackMap = sessions.reduce(function(accum, session){
+                    var trackName = session.track.name;
+                    var trackId = session.track.id;
+                    if (accum[trackId - 1]) {
+                        accum[trackId - 1].count++;
+                    } else {
+                        accum[trackId - 1] = {
+                            track: trackName,
+                            count: 1
+                        };
+                    }
+                    return accum;
+                }, []);
+                return trackMap;
+            });
         }
 
         function getSpeakersLocal() {
